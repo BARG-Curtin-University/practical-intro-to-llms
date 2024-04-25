@@ -33,7 +33,6 @@ bibliography: references.bib
 citation:
   container-title: BARG Curtin University
 number-sections: true
-bibliography: references.bib
 ---
 
 ## Introduction
