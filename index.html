@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-04-25">
+<meta name="keywords" content="Large Language Models, Practical Applications, Text Chunking, Retrieval-Augmented Generation (RAG), Vector Databases, Prompt Engineering">
+
+<title>Mastering Large Language Models: A Hands-On Guide to Practical Applications</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+
+
+<meta name="citation_title" content="Mastering Large Language Models: A Hands-On Guide to Practical Applications">
+<meta name="citation_abstract" content="This tutorial offers a comprehensive introduction to Large Language Models (LLMs), providing learners with the knowledge and tools needed to effectively utilise these powerful AI technologies. Through a series of interactive examples and practical applications, participants will explore the core concepts of LLMs, including prompt engineering, model selection, and advanced techniques such as Retrieval-Augmented Generation (RAG) and text chunking. Designed for both beginners and experienced users, this guide aims to demystify LLMs and illustrate their potential in solving real-world problems, enhancing both understanding and capability in applying cutting-edge AI.
+">
+<meta name="citation_keywords" content="Large Language Models,Practical Applications,Text Chunking,Retrieval-Augmented Generation (RAG),Vector Databases,Prompt Engineering">
+<meta name="citation_author" content="Michael Borck">
+<meta name="citation_publication_date" content="2024-04-25">
+<meta name="citation_cover_date" content="2024-04-25">
+<meta name="citation_year" content="2024">
+<meta name="citation_online_date" content="2024-04-25">
+<meta name="citation_language" content="en">
+<meta name="citation_journal_title" content="BARG Curtin University">
+<meta name="citation_reference" content="citation_title=Literate programming;,citation_author=Donald E. Knuth;,citation_publication_date=1984-05;,citation_cover_date=1984-05;,citation_year=1984;,citation_fulltext_html_url=https://doi.org/10.1093/comjnl/27.2.97;,citation_issue=2;,citation_doi=10.1093/comjnl/27.2.97;,citation_issn=0010-4620;,citation_volume=27;,citation_journal_title=Comput. J.;,citation_publisher=Oxford University Press, Inc.;">
+</head>
+
+<body>
+
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Mastering Large Language Models: A Hands-On Guide to Practical Applications</h1>
+          </div>
+
+    
+    <div class="quarto-title-meta-container">
+      <div class="quarto-title-meta-column-start">
+            <div class="quarto-title-meta-author">
+          <div class="quarto-title-meta-heading">Author</div>
+          <div class="quarto-title-meta-heading">Affiliation</div>
+          
+                <div class="quarto-title-meta-contents">
+            <p class="author">Michael Borck <a href="mailto:michael.borck@curtin.edu.au" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-0950-6396" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+                <div class="quarto-title-meta-contents">
+                    <p class="affiliation">
+                        Business Information Systems, Curtin University, Perth Australia
+                      </p>
+                  </div>
+                    </div>
+        
+        <div class="quarto-title-meta">
+
+                      
+                <div>
+            <div class="quarto-title-meta-heading">Published</div>
+            <div class="quarto-title-meta-contents">
+              <p class="date">April 25, 2024</p>
+            </div>
+          </div>
+          
+                
+              </div>
+      </div>
+      <div class="quarto-title-meta-column-end quarto-other-formats-target">
+      <div class="quarto-alternate-formats"><div class="quarto-title-meta-heading">Other Formats</div><div class="quarto-title-meta-contents"><p><a href="index.docx"><i class="bi bi-file-word"></i>MS Word</a></p></div><div class="quarto-title-meta-contents"><p><a href="index-meca.zip" data-meca-link="true"><i class="bi bi-archive"></i>MECA Bundle</a></p></div></div></div>
+    </div>
+
+    <div>
+      <div class="abstract">
+        <div class="block-title">Abstract</div>
+        <p>This tutorial offers a comprehensive introduction to Large Language Models (LLMs), providing learners with the knowledge and tools needed to effectively utilise these powerful AI technologies. Through a series of interactive examples and practical applications, participants will explore the core concepts of LLMs, including prompt engineering, model selection, and advanced techniques such as Retrieval-Augmented Generation (RAG) and text chunking. Designed for both beginners and experienced users, this guide aims to demystify LLMs and illustrate their potential in solving real-world problems, enhancing both understanding and capability in applying cutting-edge AI.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="keywords">
+        <div class="block-title">Keywords</div>
+        <p>Large Language Models, Practical Applications, Text Chunking, Retrieval-Augmented Generation (RAG), Vector Databases, Prompt Engineering</p>
+      </div>
+    </div>
+
+    <div class="quarto-other-links-text-target">
+    </div>  </div>
+</header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#what-is-an-llm" id="toc-what-is-an-llm" class="nav-link" data-scroll-target="#what-is-an-llm"><span class="header-section-number">2</span> What is an LLM?</a></li>
+  <li><a href="#key-characteristics-of-llms" id="toc-key-characteristics-of-llms" class="nav-link" data-scroll-target="#key-characteristics-of-llms"><span class="header-section-number">3</span> Key Characteristics of LLMs</a></li>
+  <li><a href="#practical-examples-of-llm-tasks" id="toc-practical-examples-of-llm-tasks" class="nav-link" data-scroll-target="#practical-examples-of-llm-tasks"><span class="header-section-number">4</span> Practical Examples of LLM Tasks</a>
+  <ul class="collapse">
+  <li><a href="#text-classification" id="toc-text-classification" class="nav-link" data-scroll-target="#text-classification"><span class="header-section-number">4.1</span> 1. Text Classification</a></li>
+  <li><a href="#sentiment-analysis" id="toc-sentiment-analysis" class="nav-link" data-scroll-target="#sentiment-analysis"><span class="header-section-number">4.2</span> 2. Sentiment Analysis</a></li>
+  <li><a href="#question-answering" id="toc-question-answering" class="nav-link" data-scroll-target="#question-answering"><span class="header-section-number">4.3</span> 3. Question Answering</a></li>
+  <li><a href="#abstract-reasoning" id="toc-abstract-reasoning" class="nav-link" data-scroll-target="#abstract-reasoning"><span class="header-section-number">4.4</span> 4. Abstract Reasoning</a></li>
+  <li><a href="#creative-text-generation" id="toc-creative-text-generation" class="nav-link" data-scroll-target="#creative-text-generation"><span class="header-section-number">4.5</span> 5. Creative Text Generation</a></li>
+  <li><a href="#implementation-notes" id="toc-implementation-notes" class="nav-link" data-scroll-target="#implementation-notes"><span class="header-section-number">4.6</span> Implementation Notes</a></li>
+  </ul></li>
+  <li><a href="#understanding-context-length-limitations" id="toc-understanding-context-length-limitations" class="nav-link" data-scroll-target="#understanding-context-length-limitations"><span class="header-section-number">5</span> Understanding Context Length Limitations</a>
+  <ul class="collapse">
+  <li><a href="#the-challenge-of-context-length" id="toc-the-challenge-of-context-length" class="nav-link" data-scroll-target="#the-challenge-of-context-length"><span class="header-section-number">5.1</span> The Challenge of Context Length</a></li>
+  <li><a href="#impact-and-examples" id="toc-impact-and-examples" class="nav-link" data-scroll-target="#impact-and-examples"><span class="header-section-number">5.2</span> Impact and Examples</a></li>
+  <li><a href="#text-chunking-strategies" id="toc-text-chunking-strategies" class="nav-link" data-scroll-target="#text-chunking-strategies"><span class="header-section-number">5.3</span> Text Chunking Strategies</a></li>
+  </ul></li>
+  <li><a href="#advanced-techniques" id="toc-advanced-techniques" class="nav-link" data-scroll-target="#advanced-techniques"><span class="header-section-number">6</span> Advanced Techniques</a>
+  <ul class="collapse">
+  <li><a href="#bridging-the-gap-with-raptor" id="toc-bridging-the-gap-with-raptor" class="nav-link" data-scroll-target="#bridging-the-gap-with-raptor"><span class="header-section-number">6.1</span> Bridging the Gap with RAPTOR</a></li>
+  <li><a href="#bridging-the-gap-with-rag" id="toc-bridging-the-gap-with-rag" class="nav-link" data-scroll-target="#bridging-the-gap-with-rag"><span class="header-section-number">6.2</span> Bridging the Gap with RAG</a></li>
+  <li><a href="#introduction-to-vector-databases" id="toc-introduction-to-vector-databases" class="nav-link" data-scroll-target="#introduction-to-vector-databases"><span class="header-section-number">6.3</span> Introduction to Vector Databases</a></li>
+  <li><a href="#the-need-for-rag-and-vector-databases" id="toc-the-need-for-rag-and-vector-databases" class="nav-link" data-scroll-target="#the-need-for-rag-and-vector-databases"><span class="header-section-number">6.4</span> The Need for RAG and Vector Databases</a></li>
+  <li><a href="#text-chunking-and-embeddings" id="toc-text-chunking-and-embeddings" class="nav-link" data-scroll-target="#text-chunking-and-embeddings"><span class="header-section-number">6.5</span> Text Chunking and Embeddings</a></li>
+  <li><a href="#combining-rag-with-vector-databases" id="toc-combining-rag-with-vector-databases" class="nav-link" data-scroll-target="#combining-rag-with-vector-databases"><span class="header-section-number">6.6</span> Combining RAG with Vector Databases</a></li>
+  <li><a href="#implementing-rag" id="toc-implementing-rag" class="nav-link" data-scroll-target="#implementing-rag"><span class="header-section-number">6.7</span> Implementing RAG</a></li>
+  <li><a href="#implementing-rag-without-a-vector-database" id="toc-implementing-rag-without-a-vector-database" class="nav-link" data-scroll-target="#implementing-rag-without-a-vector-database"><span class="header-section-number">6.8</span> Implementing RAG Without a Vector Database</a></li>
+  </ul></li>
+  <li><a href="#levels-of-using-llms-in-practice" id="toc-levels-of-using-llms-in-practice" class="nav-link" data-scroll-target="#levels-of-using-llms-in-practice"><span class="header-section-number">7</span> Levels of Using LLMs in Practice</a>
+  <ul class="collapse">
+  <li><a href="#level-1-prompt-engineering" id="toc-level-1-prompt-engineering" class="nav-link" data-scroll-target="#level-1-prompt-engineering"><span class="header-section-number">7.1</span> Level 1: Prompt Engineering</a></li>
+  <li><a href="#level-2-text-chunking-and-basic-retrieval" id="toc-level-2-text-chunking-and-basic-retrieval" class="nav-link" data-scroll-target="#level-2-text-chunking-and-basic-retrieval"><span class="header-section-number">7.2</span> Level 2: Text Chunking and Basic Retrieval</a></li>
+  <li><a href="#level-3-raptor---advanced-hierarchical-retrieval" id="toc-level-3-raptor---advanced-hierarchical-retrieval" class="nav-link" data-scroll-target="#level-3-raptor---advanced-hierarchical-retrieval"><span class="header-section-number">7.3</span> Level 3: RAPTOR - Advanced Hierarchical Retrieval</a></li>
+  <li><a href="#level-4-retrieval-augmented-generation-rag-with-vector-databases" id="toc-level-4-retrieval-augmented-generation-rag-with-vector-databases" class="nav-link" data-scroll-target="#level-4-retrieval-augmented-generation-rag-with-vector-databases"><span class="header-section-number">7.4</span> Level 4: Retrieval-Augmented Generation (RAG) with Vector Databases</a></li>
+  <li><a href="#level-5-advanced-rag-and-fine-tuning" id="toc-level-5-advanced-rag-and-fine-tuning" class="nav-link" data-scroll-target="#level-5-advanced-rag-and-fine-tuning"><span class="header-section-number">7.5</span> Level 5: Advanced RAG and Fine-Tuning</a></li>
+  <li><a href="#level-6-building-custom-llms-from-scratch" id="toc-level-6-building-custom-llms-from-scratch" class="nav-link" data-scroll-target="#level-6-building-custom-llms-from-scratch"><span class="header-section-number">7.6</span> Level 6: Building Custom LLMs from Scratch</a></li>
+  </ul></li>
+  <li><a href="#resource-requirements-and-accessibility" id="toc-resource-requirements-and-accessibility" class="nav-link" data-scroll-target="#resource-requirements-and-accessibility"><span class="header-section-number">8</span> Resource Requirements and Accessibility</a>
+  <ul class="collapse">
+  <li><a href="#level-1-prompt-engineering-1" id="toc-level-1-prompt-engineering-1" class="nav-link" data-scroll-target="#level-1-prompt-engineering-1"><span class="header-section-number">8.1</span> Level 1: Prompt Engineering</a></li>
+  <li><a href="#level-2-text-chunking-and-basic-retrieval-1" id="toc-level-2-text-chunking-and-basic-retrieval-1" class="nav-link" data-scroll-target="#level-2-text-chunking-and-basic-retrieval-1"><span class="header-section-number">8.2</span> Level 2: Text Chunking and Basic Retrieval</a></li>
+  <li><a href="#level-3-raptor---advanced-hierarchical-retrieval-1" id="toc-level-3-raptor---advanced-hierarchical-retrieval-1" class="nav-link" data-scroll-target="#level-3-raptor---advanced-hierarchical-retrieval-1"><span class="header-section-number">8.3</span> Level 3: RAPTOR - Advanced Hierarchical Retrieval</a></li>
+  <li><a href="#level-4-retrieval-augmented-generation-with-vector-databases" id="toc-level-4-retrieval-augmented-generation-with-vector-databases" class="nav-link" data-scroll-target="#level-4-retrieval-augmented-generation-with-vector-databases"><span class="header-section-number">8.4</span> Level 4: Retrieval-Augmented Generation with Vector Databases</a></li>
+  <li><a href="#level-5-advanced-rag-and-fine-tuning-1" id="toc-level-5-advanced-rag-and-fine-tuning-1" class="nav-link" data-scroll-target="#level-5-advanced-rag-and-fine-tuning-1"><span class="header-section-number">8.5</span> Level 5: Advanced RAG and Fine-Tuning</a></li>
+  <li><a href="#level-6-building-custom-llms-from-scratch-1" id="toc-level-6-building-custom-llms-from-scratch-1" class="nav-link" data-scroll-target="#level-6-building-custom-llms-from-scratch-1"><span class="header-section-number">8.6</span> Level 6: Building Custom LLMs from Scratch</a></li>
+  <li><a href="#encouraging-accessible-alternatives" id="toc-encouraging-accessible-alternatives" class="nav-link" data-scroll-target="#encouraging-accessible-alternatives"><span class="header-section-number">8.7</span> Encouraging Accessible Alternatives</a></li>
+  </ul></li>
+  <li><a href="#limitations-and-challenges-of-large-language-models-llms" id="toc-limitations-and-challenges-of-large-language-models-llms" class="nav-link" data-scroll-target="#limitations-and-challenges-of-large-language-models-llms"><span class="header-section-number">9</span> Limitations and Challenges of Large Language Models (LLMs)</a>
+  <ul class="collapse">
+  <li><a href="#lack-of-commonsense-reasoning" id="toc-lack-of-commonsense-reasoning" class="nav-link" data-scroll-target="#lack-of-commonsense-reasoning"><span class="header-section-number">9.1</span> 1. <strong>Lack of Commonsense Reasoning</strong></a></li>
+  <li><a href="#potential-for-biased-and-harmful-outputs" id="toc-potential-for-biased-and-harmful-outputs" class="nav-link" data-scroll-target="#potential-for-biased-and-harmful-outputs"><span class="header-section-number">9.2</span> 2. <strong>Potential for Biased and Harmful Outputs</strong></a></li>
+  <li><a href="#difficulty-in-interpreting-model-outputs" id="toc-difficulty-in-interpreting-model-outputs" class="nav-link" data-scroll-target="#difficulty-in-interpreting-model-outputs"><span class="header-section-number">9.3</span> 3. <strong>Difficulty in Interpreting Model Outputs</strong></a></li>
+  <li><a href="#potential-for-hallucination-and-factual-inaccuracies" id="toc-potential-for-hallucination-and-factual-inaccuracies" class="nav-link" data-scroll-target="#potential-for-hallucination-and-factual-inaccuracies"><span class="header-section-number">9.4</span> 4. <strong>Potential for Hallucination and Factual Inaccuracies</strong></a></li>
+  <li><a href="#lack-of-long-term-memory-and-consistency" id="toc-lack-of-long-term-memory-and-consistency" class="nav-link" data-scroll-target="#lack-of-long-term-memory-and-consistency"><span class="header-section-number">9.5</span> 5. <strong>Lack of Long-Term Memory and Consistency</strong></a></li>
+  <li><a href="#computational-and-memory-limitations" id="toc-computational-and-memory-limitations" class="nav-link" data-scroll-target="#computational-and-memory-limitations"><span class="header-section-number">9.6</span> 6. <strong>Computational and Memory Limitations</strong></a></li>
+  <li><a href="#difficulty-in-handling-out-of-distribution-data" id="toc-difficulty-in-handling-out-of-distribution-data" class="nav-link" data-scroll-target="#difficulty-in-handling-out-of-distribution-data"><span class="header-section-number">9.7</span> 7. <strong>Difficulty in Handling Out-of-Distribution Data</strong></a></li>
+  </ul></li>
+  <li><a href="#ethical-considerations-and-potential-risks-of-large-language-models-llms" id="toc-ethical-considerations-and-potential-risks-of-large-language-models-llms" class="nav-link" data-scroll-target="#ethical-considerations-and-potential-risks-of-large-language-models-llms"><span class="header-section-number">10</span> Ethical Considerations and Potential Risks of Large Language Models (LLMs)</a>
+  <ul class="collapse">
+  <li><a href="#bias-and-fairness" id="toc-bias-and-fairness" class="nav-link" data-scroll-target="#bias-and-fairness"><span class="header-section-number">10.1</span> 1. <strong>Bias and Fairness</strong></a></li>
+  <li><a href="#privacy-and-data-rights" id="toc-privacy-and-data-rights" class="nav-link" data-scroll-target="#privacy-and-data-rights"><span class="header-section-number">10.2</span> 2. <strong>Privacy and Data Rights</strong></a></li>
+  <li><a href="#transparency-and-explainability" id="toc-transparency-and-explainability" class="nav-link" data-scroll-target="#transparency-and-explainability"><span class="header-section-number">10.3</span> 3. <strong>Transparency and Explainability</strong></a></li>
+  <li><a href="#misuse-and-malicious-applications" id="toc-misuse-and-malicious-applications" class="nav-link" data-scroll-target="#misuse-and-malicious-applications"><span class="header-section-number">10.4</span> 4. <strong>Misuse and Malicious Applications</strong></a></li>
+  <li><a href="#accountability" id="toc-accountability" class="nav-link" data-scroll-target="#accountability"><span class="header-section-number">10.5</span> 5. <strong>Accountability</strong></a></li>
+  <li><a href="#security" id="toc-security" class="nav-link" data-scroll-target="#security"><span class="header-section-number">10.6</span> 6. <strong>Security</strong></a></li>
+  <li><a href="#environmental-impact" id="toc-environmental-impact" class="nav-link" data-scroll-target="#environmental-impact"><span class="header-section-number">10.7</span> 7. <strong>Environmental Impact</strong></a></li>
+  <li><a href="#displacement-of-human-labor" id="toc-displacement-of-human-labor" class="nav-link" data-scroll-target="#displacement-of-human-labor"><span class="header-section-number">10.8</span> 8. <strong>Displacement of Human Labor</strong></a></li>
+  <li><a href="#existential-risk" id="toc-existential-risk" class="nav-link" data-scroll-target="#existential-risk"><span class="header-section-number">10.9</span> 9. <strong>Existential Risk</strong></a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">11</span> Conclusion</a>
+  <ul class="collapse">
+  <li><a href="#further-reading-and-resources" id="toc-further-reading-and-resources" class="nav-link" data-scroll-target="#further-reading-and-resources"><span class="header-section-number">11.1</span> Further Reading and Resources</a></li>
+  </ul></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary"><span class="header-section-number">12</span> Glossary</a>
+  <ul class="collapse">
+  <li><a href="#abstract-reasoning-1" id="toc-abstract-reasoning-1" class="nav-link" data-scroll-target="#abstract-reasoning-1"><span class="header-section-number">12.1</span> <strong>Abstract Reasoning</strong></a></li>
+  <li><a href="#bias" id="toc-bias" class="nav-link" data-scroll-target="#bias"><span class="header-section-number">12.2</span> <strong>Bias</strong></a></li>
+  <li><a href="#chunking" id="toc-chunking" class="nav-link" data-scroll-target="#chunking"><span class="header-section-number">12.3</span> <strong>Chunking</strong></a></li>
+  <li><a href="#context-length" id="toc-context-length" class="nav-link" data-scroll-target="#context-length"><span class="header-section-number">12.4</span> <strong>Context Length</strong></a></li>
+  <li><a href="#creative-text-generation-1" id="toc-creative-text-generation-1" class="nav-link" data-scroll-target="#creative-text-generation-1"><span class="header-section-number">12.5</span> <strong>Creative Text Generation</strong></a></li>
+  <li><a href="#embedding" id="toc-embedding" class="nav-link" data-scroll-target="#embedding"><span class="header-section-number">12.6</span> <strong>Embedding</strong></a></li>
+  <li><a href="#explainability" id="toc-explainability" class="nav-link" data-scroll-target="#explainability"><span class="header-section-number">12.7</span> <strong>Explainability</strong></a></li>
+  <li><a href="#fairness" id="toc-fairness" class="nav-link" data-scroll-target="#fairness"><span class="header-section-number">12.8</span> <strong>Fairness</strong></a></li>
+  <li><a href="#fine-tuning" id="toc-fine-tuning" class="nav-link" data-scroll-target="#fine-tuning"><span class="header-section-number">12.9</span> <strong>Fine-Tuning</strong></a></li>
+  <li><a href="#hallucination" id="toc-hallucination" class="nav-link" data-scroll-target="#hallucination"><span class="header-section-number">12.10</span> <strong>Hallucination</strong></a></li>
+  <li><a href="#large-language-model-llm" id="toc-large-language-model-llm" class="nav-link" data-scroll-target="#large-language-model-llm"><span class="header-section-number">12.11</span> <strong>Large Language Model (LLM)</strong></a></li>
+  <li><a href="#prompt-engineering" id="toc-prompt-engineering" class="nav-link" data-scroll-target="#prompt-engineering"><span class="header-section-number">12.12</span> <strong>Prompt Engineering</strong></a></li>
+  <li><a href="#question-answering-1" id="toc-question-answering-1" class="nav-link" data-scroll-target="#question-answering-1"><span class="header-section-number">12.13</span> <strong>Question Answering</strong></a></li>
+  <li><a href="#raptor-recursive-abstractive-processing-for-tree-organised-retrieval" id="toc-raptor-recursive-abstractive-processing-for-tree-organised-retrieval" class="nav-link" data-scroll-target="#raptor-recursive-abstractive-processing-for-tree-organised-retrieval"><span class="header-section-number">12.14</span> <strong>RAPTOR (Recursive Abstractive Processing for Tree-Organised Retrieval)</strong></a></li>
+  <li><a href="#rag-retrieval-augmented-generation" id="toc-rag-retrieval-augmented-generation" class="nav-link" data-scroll-target="#rag-retrieval-augmented-generation"><span class="header-section-number">12.15</span> <strong>RAG (Retrieval-Augmented Generation)</strong></a></li>
+  <li><a href="#sentiment-analysis-1" id="toc-sentiment-analysis-1" class="nav-link" data-scroll-target="#sentiment-analysis-1"><span class="header-section-number">12.16</span> <strong>Sentiment Analysis</strong></a></li>
+  <li><a href="#text-classification-1" id="toc-text-classification-1" class="nav-link" data-scroll-target="#text-classification-1"><span class="header-section-number">12.17</span> <strong>Text Classification</strong></a></li>
+  <li><a href="#text-chunking" id="toc-text-chunking" class="nav-link" data-scroll-target="#text-chunking"><span class="header-section-number">12.18</span> <strong>Text Chunking</strong></a></li>
+  <li><a href="#token" id="toc-token" class="nav-link" data-scroll-target="#token"><span class="header-section-number">12.19</span> <strong>Token</strong></a></li>
+  <li><a href="#vector-database" id="toc-vector-database" class="nav-link" data-scroll-target="#vector-database"><span class="header-section-number">12.20</span> <strong>Vector Database</strong></a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+  
+
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Large Language Models (LLMs) represent a significant advancement in artificial intelligence, with the ability to understand and generate human-like text at an unprecedented scale and complexity. These models, exemplified by OpenAI’s GPT series, are characterised by their vast number of parameters, allowing them to store and process a large amount of linguistic data.</p>
+<p>LLMs exhibit emergent properties such as few-shot learning, where they can intuitively perform tasks without explicit prior training. This tutorial provides a practical introduction to LLMs, exploring their key characteristics and discussing hands-on examples of real-world applications.</p>
+<p>Throughout this tutorial, you will learn about fundamental LLM tasks such as:</p>
+<ul>
+<li>Text classification</li>
+<li>Sentiment analysis</li>
+<li>Question answering</li>
+<li>Abstract reasoning</li>
+<li>Creative text generation</li>
+</ul>
+<p>We will also delve into the challenges posed by context length limitations and introduce strategies like text chunking to mitigate these issues. Advanced techniques, including Recursive Abstractive Processing for Tree-Organised Retrieval (RAPTOR) and Retrieval-Augmented Generation (RAG), will be discussed to further enhance LLM capabilities.</p>
+<p>By the end of this tutorial, you will gain a comprehensive understanding of LLMs and their practical applications, as well as the tools and techniques needed to effectively leverage these powerful models.</p>
+</section>
+<section id="what-is-an-llm" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="what-is-an-llm"><span class="header-section-number">2</span> What is an LLM?</h2>
+<p>Large Language Models, such as OpenAI’s GPT series, represent a significant advancement in artificial intelligence. These models are capable of understanding and generating text with a level of nuance and complexity that closely resembles human output.</p>
+</section>
+<section id="key-characteristics-of-llms" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="key-characteristics-of-llms"><span class="header-section-number">3</span> Key Characteristics of LLMs</h2>
+<p>LLMs are characterised by their vast number of parameters, allowing them to store and process a large amount of linguistic data. These models exhibit emergent properties such as sero-shot learning, where they can intuitively perform tasks without explicit prior training on those tasks.</p>
+</section>
+<section id="practical-examples-of-llm-tasks" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="practical-examples-of-llm-tasks"><span class="header-section-number">4</span> Practical Examples of LLM Tasks</h2>
+<section id="text-classification" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="text-classification"><span class="header-section-number">4.1</span> 1. Text Classification</h3>
+<p>Text classification involves categorising text into predefined categories. For example, classifying news articles into topics such as sports, politics, or technology.</p>
+<p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openai</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> openai.Completion.create(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  engine<span class="op">=</span><span class="st">"text-davinci-003"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  prompt<span class="op">=</span><span class="st">"Classify the following text into categories (sports, politics, technology): 'The government has announced a new initiative to foster innovation in the tech industry.'"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  max_tokens<span class="op">=</span><span class="dv">10</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(response.choices[<span class="dv">0</span>].text.strip())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sentiment-analysis" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="sentiment-analysis"><span class="header-section-number">4.2</span> 2. Sentiment Analysis</h3>
+<p>Sentiment analysis is the process of determining the emotional tone behind a series of words. This is useful to understand the attitudes, opinions, and emotions expressed within an online mention.</p>
+<p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openai</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> openai.Completion.create(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  engine<span class="op">=</span><span class="st">"text-davinci-003"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  prompt<span class="op">=</span><span class="st">"Analyse the sentiment of this review: 'I absolutely loved the new sci-fi movie! The special effects and storyline were breathtaking and left me wanting more.'"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  max_tokens<span class="op">=</span><span class="dv">10</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(response.choices[<span class="dv">0</span>].text.strip())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="question-answering" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="question-answering"><span class="header-section-number">4.3</span> 3. Question Answering</h3>
+<p>Question answering systems can comprehend a body of text and provide answers to questions based on that text.</p>
+<p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openai</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> openai.Completion.create(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  engine<span class="op">=</span><span class="st">"text-davinci-003"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  prompt<span class="op">=</span><span class="st">"Given the text: 'The Eiffel Tower is one of the most famous landmarks in the world, located in Paris, France. It was constructed in 1889.' Answer the question: Where is the Eiffel Tower located?"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  max_tokens<span class="op">=</span><span class="dv">10</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(response.choices[<span class="dv">0</span>].text.strip())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="abstract-reasoning" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="abstract-reasoning"><span class="header-section-number">4.4</span> 4. Abstract Reasoning</h3>
+<p>Abstract reasoning involves understanding complex concepts and applying logical thinking to new problems without relying solely on factual knowledge.</p>
+<p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openai</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> openai.Completion.create(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  engine<span class="op">=</span><span class="st">"text-davinci-003"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  prompt<span class="op">=</span><span class="st">"If higher demand for a product generally leads to higher prices, what might happen to the price of a product if a celebrity endorses it positively?"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  max_tokens<span class="op">=</span><span class="dv">50</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(response.choices[<span class="dv">0</span>].text.strip())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="creative-text-generation" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="creative-text-generation"><span class="header-section-number">4.5</span> 5. Creative Text Generation</h3>
+<p>Creative text generation can involve writing stories, poems, or generating any form of text that requires imagination and creativity.</p>
+<p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openai</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> openai.Completion.create(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  engine<span class="op">=</span><span class="st">"text-davinci-003"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  prompt<span class="op">=</span><span class="st">"Write a short story about a robot discovering a hidden ancient civilisation on Mars."</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  max_tokens<span class="op">=</span><span class="dv">200</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(response.choices[<span class="dv">0</span>].text.strip())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="implementation-notes" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="implementation-notes"><span class="header-section-number">4.6</span> Implementation Notes</h3>
+<ul>
+<li><strong>API Access</strong>: To run these examples, you need access to an API like OpenAI’s GPT-3. Make sure you have the necessary API keys and understand the usage costs associated with these requests.</li>
+<li><strong>Prompt Design</strong>: The effectiveness of an LLM in performing these tasks often hinges on how the prompt is structured. Clear, concise, and well-directed prompts tend to yield better results.</li>
+<li><strong>Model Choice</strong>: Depending on your specific needs (e.g., detail of response, cost, latency), you might choose different models. OpenAI offers a range of models from the more cost-effective Ada to the more powerful and detailed Davinci.</li>
+</ul>
+<p>These examples showcase the breadth of applications for LLMs across various domains, emphasising their role as a transformative technology in the field of AI.</p>
+</section>
+</section>
+<section id="understanding-context-length-limitations" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="understanding-context-length-limitations"><span class="header-section-number">5</span> Understanding Context Length Limitations</h2>
+<section id="the-challenge-of-context-length" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="the-challenge-of-context-length"><span class="header-section-number">5.1</span> The Challenge of Context Length</h3>
+<p>Context length refers to the maximum number of tokens an LLM can process in a single prompt. This limitation can significantly impact the model’s performance, particularly for tasks requiring a deep understanding of long documents or complex queries.</p>
+</section>
+<section id="impact-and-examples" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="impact-and-examples"><span class="header-section-number">5.2</span> Impact and Examples</h3>
+<p>For instance, when asked to summarise a long article, an LLM might only consider the first section if the article exceeds the model’s token limit, potentially omitting key details found later in the text.</p>
+<ul>
+<li>[ADD EXAMPLE OF CONTEXT LENGTH LIMITATION HERE]</li>
+</ul>
+</section>
+<section id="text-chunking-strategies" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="text-chunking-strategies"><span class="header-section-number">5.3</span> Text Chunking Strategies</h3>
+<p>To mitigate the impact of context length limitations, text chunking strategies can be employed. Chunking involves dividing a long document into smaller, discrete pieces that fit within the model’s maximum token count. Each chunk is then processed independently, and the results can be aggregated or further processed to derive a comprehensive understanding or response.</p>
+<section id="implementing-text-chunking" class="level4" data-number="5.3.1">
+<h4 data-number="5.3.1" class="anchored" data-anchor-id="implementing-text-chunking"><span class="header-section-number">5.3.1</span> Implementing Text Chunking</h4>
+<p>Here are some approaches to chunking:</p>
+<ul>
+<li><p><strong>Equal Division</strong>: Split the text into equally sized chunks that do not exceed the token limit. Care must be taken to ensure that the division does not cut sentences or important semantic units inappropriately.</p></li>
+<li><p><strong>Semantic Preservation</strong>: Use natural linguistic breaks such as sentences, paragraphs, or sections to divide the text. This method helps maintain the coherence of the information in each chunk.</p></li>
+<li><p><strong>Overlap Strategy</strong>: Include some overlap between consecutive chunks to preserve context continuity. This can help in maintaining the flow and coherence across chunks, especially for tasks like summarisation or detailed analysis.</p></li>
+<li><p>[ADD CODE EXAMPLE FOR TEXT CHUNKING HERE]</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="advanced-techniques" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="advanced-techniques"><span class="header-section-number">6</span> Advanced Techniques</h2>
+<p>While prompt engineering and chunking are useful, it may not always suffice for tasks requiring deep integration of information across a long text. In such cases, advanced techniques like Recursive Abstractive Processing for Tree-Organised Retrieval (RAPTOR) and Retrieval-Augmented Generation (RAG) can further enhance the capability of LLMs to process extensive data by pulling in relevant information dynamically as needed.</p>
+<section id="bridging-the-gap-with-raptor" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="bridging-the-gap-with-raptor"><span class="header-section-number">6.1</span> Bridging the Gap with RAPTOR</h3>
+<p>RAPTOR is a novel retrieval method that aims to enhance the performance of large language models (LLMs) by providing a more effective way to handle long context. RAPTOR builds a hierarchical tree structure by recursively clustering and summarising text chunks from the retrieval corpus4. This allows LLMs to access relevant information at different levels of specificity, from low-level details to high-level summaries. In summary, RAPTOR is a promising approach to enhance LLMs by providing a more effective retrieval mechanism that can handle long context and capture high-level and low-level details of the text[3][4]. The tree-based structure enables LLMs to integrate knowledge from multiple parts of the text, leading to improved performance on various tasks.</p>
+<ul>
+<li>[ADD CODE EXAMPLE FOR RAPTOR HERE]</li>
+</ul>
+</section>
+<section id="bridging-the-gap-with-rag" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="bridging-the-gap-with-rag"><span class="header-section-number">6.2</span> Bridging the Gap with RAG</h3>
+<p>Retrieval-Augmented Generation enhances LLM capabilities by integrating a retrieval system that fetches relevant external information to supplement the model’s responses. This technique effectively extends the LLM’s ability to handle queries that exceed its native context length.</p>
+</section>
+<section id="introduction-to-vector-databases" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="introduction-to-vector-databases"><span class="header-section-number">6.3</span> Introduction to Vector Databases</h3>
+<p>Vector databases store data as vectors of real numbers, which represent different features or aspects of the data items. These databases are crucial in the context of LLMs for efficiently storing and retrieving large amounts of vectorised data, such as text embeddings. They are particularly useful for tasks involving semantic search, where the goal is to find items in a dataset that are semantically similar to a query.</p>
+</section>
+<section id="the-need-for-rag-and-vector-databases" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="the-need-for-rag-and-vector-databases"><span class="header-section-number">6.4</span> The Need for RAG and Vector Databases</h3>
+<p>Retrieval-Augmented Generation (RAG) combines the generative capabilities of LLMs with a retrieval mechanism that fetches relevant information to support the generation process. Here, vector databases play a critical role by enabling quick retrieval of the most relevant text segments or documents based on their semantic similarity to the query. This is essential for ensuring that the generative model has access to the most contextually appropriate information.</p>
+</section>
+<section id="text-chunking-and-embeddings" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="text-chunking-and-embeddings"><span class="header-section-number">6.5</span> Text Chunking and Embeddings</h3>
+<p>Before leveraging a vector database for RAG, it is often necessary to preprocess the data, especially when dealing with large texts. Text chunking becomes a preparatory step here:</p>
+<ol type="1">
+<li><p><strong>Chunking Large Texts</strong>: Divide long documents into smaller segments or chunks that are more manageable for processing by LLMs. This helps to ensure that each piece of text can be individually analysed and vectorised without losing meaning due to truncation.</p></li>
+<li><p><strong>Creating Embeddings</strong>: Once the texts are chunked, each piece is converted into a vector representation (embedding) that captures its semantic essence. These embeddings are then stored in a vector database.</p></li>
+<li><p><strong>Utilising Vector Databases</strong>: When a query is made, the LLM retrieves the embeddings that are most semantically similar to the query from the vector database. These embeddings represent chunks of text that are most relevant to the query, which the LLM then uses to generate an informed response.</p></li>
+</ol>
+<section id="implementation-of-text-chunking-and-embeddings" class="level4" data-number="6.5.1">
+<h4 data-number="6.5.1" class="anchored" data-anchor-id="implementation-of-text-chunking-and-embeddings"><span class="header-section-number">6.5.1</span> Implementation of Text Chunking and Embeddings</h4>
+<ul>
+<li><p><strong>Chunking Strategy</strong>: Implement a strategy that respects natural language breaks and includes overlap for context continuity.</p></li>
+<li><p><strong>Embedding Process</strong>: Use a model like BERT or RoBERTa to convert text chunks into embeddings.</p></li>
+<li><p><strong>Storing Embeddings</strong>: Store these embeddings in a vector database like Faiss, Elasticsearch, or Annoy, which facilitates fast and efficient retrieval.</p></li>
+<li><p>[ADD CODE EXAMPLE FOR TEXT CHUNKING AND EMBEDDING HERE]</p></li>
+</ul>
+</section>
+</section>
+<section id="combining-rag-with-vector-databases" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="combining-rag-with-vector-databases"><span class="header-section-number">6.6</span> Combining RAG with Vector Databases</h3>
+<p>Incorporating RAG with vector databases optimises the retrieval process, ensuring that the generative component of the LLM has access to the most relevant and comprehensive information available. This technique significantly enhances the LLM’s ability to generate accurate and contextually relevant responses, particularly for complex queries that go beyond the model’s training data.</p>
+<ul>
+<li>[ADD CODE EXAMPLE FOR RAG WITH VECTOR DATABASES HERE]</li>
+</ul>
+</section>
+<section id="implementing-rag" class="level3" data-number="6.7">
+<h3 data-number="6.7" class="anchored" data-anchor-id="implementing-rag"><span class="header-section-number">6.7</span> Implementing RAG</h3>
+<p>RAG can be particularly useful in scenarios requiring up-to-date information or responses based on extensive data not contained within the model’s initial training set.</p>
+<ul>
+<li>[ADD CODE EXAMPLE FOR RAG IMPLEMENTATION HERE]</li>
+</ul>
+</section>
+<section id="implementing-rag-without-a-vector-database" class="level3" data-number="6.8">
+<h3 data-number="6.8" class="anchored" data-anchor-id="implementing-rag-without-a-vector-database"><span class="header-section-number">6.8</span> Implementing RAG Without a Vector Database</h3>
+<p>It is possible to implement Retrieval-Augmented Generation (RAG) without explicitly using a vector database managing and querying large volumes of data or embeddings can become inefficient as the dataset grows. Memory limitations and slower retrieval times are potential challenges. Instead of using a vector database to store and retrieve embeddings, you can directly search through a set of documents or data. This approach involves:</p>
+<ul>
+<li><strong>Document Storage</strong>: Documents are stored in their raw textual form, possibly indexed using a traditional text search engine like Elasticsearch, which supports full-text search capabilities without necessarily using vector embeddings.</li>
+<li><strong>Query Matching</strong>: When a query is issued, the system performs a text search to find documents or snippets that match the query based on keyword similarity or other traditional search metrics.</li>
+<li><strong>Data Retrieval</strong>: The most relevant documents or snippets are then retrieved based on the search results and passed to the LLM for processing.</li>
+<li><strong>Embedding Storage</strong>: Embeddings are precomputed and stored in an array or similar data structure in the application’s memory.</li>
+<li><strong>Similarity Computation</strong>: When a query is processed, its embedding is compared against the stored embeddings using similarity metrics (like cosine similarity).</li>
+<li><strong>Selection of Top Results</strong>: The top N most similar embeddings are selected, and the corresponding text chunks are fed into the LLM for generating the final output.</li>
+</ul>
+<p>If not using a vector database, consider leveraging:</p>
+<ul>
+<li><strong>Full-Text Search Engines</strong>: Tools like Elasticsearch or Apache Solr that support advanced text indexing and search capabilities.</li>
+<li><strong>In-Memory Databases</strong>: If dataset size allows, in-memory databases or caching solutions can store embeddings and support relatively fast retrieval operations.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example placeholder for RAG implementation using a full-text search engine</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># [ADD CODE EXAMPLE FOR RAG USING FULL-TEXT SEARCH HERE]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Implementing RAG without a vector database is feasible, especially for smaller or less complex datasets. However, for applications that require handling large datasets with a need for quick and semantically rich retrieval, using a vector database remains a more effective and scalable solution.</p>
+</section>
+</section>
+<section id="levels-of-using-llms-in-practice" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="levels-of-using-llms-in-practice"><span class="header-section-number">7</span> Levels of Using LLMs in Practice</h2>
+<p>This section outlines a progression of techniques from basic to advanced, helping users understand and effectively utilise Large Language Models (LLMs) across a range of tasks.</p>
+<section id="level-1-prompt-engineering" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="level-1-prompt-engineering"><span class="header-section-number">7.1</span> Level 1: Prompt Engineering</h3>
+<p><strong>Description</strong>: This level involves using LLMs “out-of-the-box” without modifying any underlying model parameters. It’s the simplest and most accessible form of interaction with LLMs.</p>
+<p><strong>Applications</strong>:</p>
+<ul>
+<li>Generating text based on simple prompts.</li>
+<li>Answering straightforward questions or performing basic tasks like text classification.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>[ADD CODE EXAMPLE FOR BASIC PROMPT ENGINEERING HERE]</li>
+</ul>
+</section>
+<section id="level-2-text-chunking-and-basic-retrieval" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="level-2-text-chunking-and-basic-retrieval"><span class="header-section-number">7.2</span> Level 2: Text Chunking and Basic Retrieval</h3>
+<p><strong>Description</strong>: As users encounter the limitations of LLMs due to context length, text chunking and basic retrieval techniques can be employed to manage and process larger documents effectively.</p>
+<p><strong>Applications</strong>:</p>
+<ul>
+<li>Breaking down long documents into manageable pieces.</li>
+<li>Using simple retrieval methods to fetch relevant text chunks based on keyword search or basic semantic matching.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>[ADD CODE EXAMPLE FOR TEXT CHUNKING AND BASIC RETRIEVAL HERE]</li>
+</ul>
+</section>
+<section id="level-3-raptor---advanced-hierarchical-retrieval" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="level-3-raptor---advanced-hierarchical-retrieval"><span class="header-section-number">7.3</span> Level 3: RAPTOR - Advanced Hierarchical Retrieval</h3>
+<p><strong>Description</strong>: RAPTOR enhances LLMs by building a hierarchical tree structure that clusters and summarises text chunks from the retrieval corpus. This method allows for accessing information at various levels of specificity, from detailed extracts to broad summaries.</p>
+<p><strong>Applications</strong>:</p>
+<ul>
+<li>Enhancing the model’s ability to handle long contexts by allowing it to access relevant information without being overwhelmed by data volume.</li>
+<li>Improving performance on tasks that require integration of knowledge from multiple text parts, such as comprehensive analyses or detailed explorations of topics.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>[ADD CODE EXAMPLE FOR RAPTOR IMPLEMENTATION HERE]</li>
+</ul>
+</section>
+<section id="level-4-retrieval-augmented-generation-rag-with-vector-databases" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="level-4-retrieval-augmented-generation-rag-with-vector-databases"><span class="header-section-number">7.4</span> Level 4: Retrieval-Augmented Generation (RAG) with Vector Databases</h3>
+<p><strong>Description</strong>: This level introduces the integration of LLMs with vector databases for dynamic information retrieval, enhancing the model’s ability to generate responses based on comprehensive and semantically relevant external data.</p>
+<p><strong>Applications</strong>:</p>
+<ul>
+<li>Complex question answering where responses require up-to-date or detailed knowledge.</li>
+<li>Tasks that benefit from access to a broader range of information than what is contained in the model’s training data.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>[ADD CODE EXAMPLE FOR RAG WITH VECTOR DATABASES HERE]</li>
+</ul>
+</section>
+<section id="level-5-advanced-rag-and-fine-tuning" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="level-5-advanced-rag-and-fine-tuning"><span class="header-section-number">7.5</span> Level 5: Advanced RAG and Fine-Tuning</h3>
+<p><strong>Description</strong>: At this level, users not only utilise advanced RAG setups but also start fine-tuning models to specific datasets or tasks, optimising performance for particular use cases.</p>
+<p><strong>Applications</strong>:</p>
+<ul>
+<li>Tailoring responses more closely to specific domain requirements.</li>
+<li>Enhancing accuracy and relevance in scenarios where standard model outputs require adaptation to unique contexts.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>[ADD CODE EXAMPLE FOR FINE-TUNING LLMs HERE]</li>
+</ul>
+</section>
+<section id="level-6-building-custom-llms-from-scratch" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="level-6-building-custom-llms-from-scratch"><span class="header-section-number">7.6</span> Level 6: Building Custom LLMs from Scratch</h3>
+<p><strong>Description</strong>: The most advanced level involves developing entirely new LLMs, customised from the ground up. This approach requires significant resources and expertise but offers the highest degree of customisation.</p>
+<p><strong>Applications</strong>:</p>
+<ul>
+<li>Developing LLMs for specialised fields, such as legal or medical domains, where existing models may not provide sufficient accuracy.</li>
+<li>Creating models tailored to unique linguistic or cultural contexts not well-represented in general-purpose models.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>[ADD CODE EXAMPLE FOR BUILDING LLMs FROM SCRATCH HERE]</li>
+</ul>
+<p>Absolutely, adding a section about the resources required for each level can provide valuable context for readers, helping them assess the feasibility of engaging with these technologies based on their own capabilities and resources. This section can also guide readers towards achievable goals within their means and encourage exploration of lower levels or alternative approaches that are more accessible.</p>
+</section>
+</section>
+<section id="resource-requirements-and-accessibility" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="resource-requirements-and-accessibility"><span class="header-section-number">8</span> Resource Requirements and Accessibility</h2>
+<p>Understanding the resource requirements for each level of LLM usage can help set realistic expectations and drive informed decision-making. This section provides insights into the technical, financial, and human resources needed for each level, offering alternatives where possible. This section helps you gauge what’s involved at each level but also encourages them to consider alternative, less resource-intensive ways to participate in the development and application of LLM technologies.</p>
+<section id="level-1-prompt-engineering-1" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="level-1-prompt-engineering-1"><span class="header-section-number">8.1</span> Level 1: Prompt Engineering</h3>
+<p><strong>Resources Needed</strong>:</p>
+<ul>
+<li><strong>Technical</strong>: Minimal technical skills required; basic understanding of how to interact with APIs.</li>
+<li><strong>Financial</strong>: Low cost; many platforms offer free tiers or inexpensive options for light usage.</li>
+<li><strong>Human</strong>: Individual researchers, developers, or hobbyists can easily manage.</li>
+</ul>
+<p><strong>Motivation</strong>: Ideal for individuals or small teams looking to explore LLM capabilities without significant investment.</p>
+</section>
+<section id="level-2-text-chunking-and-basic-retrieval-1" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="level-2-text-chunking-and-basic-retrieval-1"><span class="header-section-number">8.2</span> Level 2: Text Chunking and Basic Retrieval</h3>
+<p><strong>Resources Needed</strong>:</p>
+<ul>
+<li><strong>Technical</strong>: Moderate technical skills; familiarity with basic programming and data handling.</li>
+<li><strong>Financial</strong>: Generally low cost; dependent on the volume of data processed.</li>
+<li><strong>Human</strong>: Accessible to small teams or educational settings.</li>
+</ul>
+<p><strong>Motivation</strong>: Encourages deeper understanding of data preprocessing and simple retrieval methods that enhance LLM outputs.</p>
+</section>
+<section id="level-3-raptor---advanced-hierarchical-retrieval-1" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="level-3-raptor---advanced-hierarchical-retrieval-1"><span class="header-section-number">8.3</span> Level 3: RAPTOR - Advanced Hierarchical Retrieval</h3>
+<p><strong>Resources Needed</strong>:</p>
+<ul>
+<li><strong>Technical</strong>: Advanced programming skills and understanding of machine learning principles.</li>
+<li><strong>Financial</strong>: Moderate cost for implementing and maintaining hierarchical systems.</li>
+<li><strong>Human</strong>: Suitable for research groups or companies with dedicated R&amp;D capabilities.</li>
+</ul>
+<p><strong>Motivation</strong>: Explore cutting-edge retrieval techniques that significantly improve the contextual handling of LLMs.</p>
+</section>
+<section id="level-4-retrieval-augmented-generation-with-vector-databases" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="level-4-retrieval-augmented-generation-with-vector-databases"><span class="header-section-number">8.4</span> Level 4: Retrieval-Augmented Generation with Vector Databases</h3>
+<p><strong>Resources Needed</strong>:</p>
+<ul>
+<li><strong>Technical</strong>: High level of expertise in machine learning, databases, and system integration.</li>
+<li><strong>Financial</strong>: Significant investment required for infrastructure and ongoing operation.</li>
+<li><strong>Human</strong>: Best suited for well-resourced organisations or collaborative research projects.</li>
+</ul>
+<p><strong>Motivation</strong>: Engage in advanced LLM applications that require dynamic, real-time data retrieval and processing.</p>
+</section>
+<section id="level-5-advanced-rag-and-fine-tuning-1" class="level3" data-number="8.5">
+<h3 data-number="8.5" class="anchored" data-anchor-id="level-5-advanced-rag-and-fine-tuning-1"><span class="header-section-number">8.5</span> Level 5: Advanced RAG and Fine-Tuning</h3>
+<p><strong>Resources Needed</strong>:</p>
+<ul>
+<li><strong>Technical</strong>: Deep expertise in NLP and machine learning model training.</li>
+<li><strong>Financial</strong>: High costs for training data, computing power, and model maintenance.</li>
+<li><strong>Human</strong>: Typically requires a team of experts and significant organisational support.</li>
+</ul>
+<p><strong>Motivation</strong>: Tailor LLM outputs to specific needs, enhancing relevance and accuracy for specialised applications.</p>
+</section>
+<section id="level-6-building-custom-llms-from-scratch-1" class="level3" data-number="8.6">
+<h3 data-number="8.6" class="anchored" data-anchor-id="level-6-building-custom-llms-from-scratch-1"><span class="header-section-number">8.6</span> Level 6: Building Custom LLMs from Scratch</h3>
+<p><strong>Resources Needed</strong>:</p>
+<ul>
+<li><strong>Technical</strong>: Extensive expertise in AI, machine learning, software development, and data science.</li>
+<li><strong>Financial</strong>: Substantial funding necessary for data acquisition, computing resources, and personnel.</li>
+<li><strong>Human</strong>: Requires a large team of specialists, often within a corporate or large-scale academic environment.</li>
+</ul>
+<p><strong>Motivation</strong>: Develop highly specialised models for unique or innovative applications, pushing the boundaries of what LLMs can achieve.</p>
+</section>
+<section id="encouraging-accessible-alternatives" class="level3" data-number="8.7">
+<h3 data-number="8.7" class="anchored" data-anchor-id="encouraging-accessible-alternatives"><span class="header-section-number">8.7</span> Encouraging Accessible Alternatives</h3>
+<p>For those with limited resources, focusing on quantised models or exploring stable diffusion techniques might offer a more viable entry point. These approaches allow for the customisation and enhancement of LLM capabilities without the need for extensive resources:</p>
+<ul>
+<li><strong>Quantised Models</strong>: Reduced resource consumption and potentially lower costs while maintaining reasonable performance.</li>
+<li><strong>Mixture of Experts</strong>: Leveraging specialised, lightweight models that can be combined to address specific tasks effectively.</li>
+</ul>
+</section>
+</section>
+<section id="limitations-and-challenges-of-large-language-models-llms" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="limitations-and-challenges-of-large-language-models-llms"><span class="header-section-number">9</span> Limitations and Challenges of Large Language Models (LLMs)</h2>
+<p>While LLMs have demonstrated impressive capabilities in various natural language processing tasks, they also face several limitations and challenges that need to be considered when deploying these models in real-world applications.</p>
+<section id="lack-of-commonsense-reasoning" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="lack-of-commonsense-reasoning"><span class="header-section-number">9.1</span> 1. <strong>Lack of Commonsense Reasoning</strong></h3>
+<p>LLMs can struggle with tasks that require commonsense reasoning, as they may lack the ability to draw inferences based on real-world knowledge. This limitation can lead to inconsistent or nonsensical outputs in certain contexts.</p>
+</section>
+<section id="potential-for-biased-and-harmful-outputs" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="potential-for-biased-and-harmful-outputs"><span class="header-section-number">9.2</span> 2. <strong>Potential for Biased and Harmful Outputs</strong></h3>
+<p>LLMs can perpetuate and amplify societal biases present in their training data, leading to biased and potentially harmful outputs. This is a significant concern when using these models in high-stakes applications such as healthcare or finance.</p>
+</section>
+<section id="difficulty-in-interpreting-model-outputs" class="level3" data-number="9.3">
+<h3 data-number="9.3" class="anchored" data-anchor-id="difficulty-in-interpreting-model-outputs"><span class="header-section-number">9.3</span> 3. <strong>Difficulty in Interpreting Model Outputs</strong></h3>
+<p>The inner workings of LLMs are often opaque, making it challenging to interpret and explain their outputs. This lack of transparency can hinder trust and accountability when using these models in critical applications.</p>
+</section>
+<section id="potential-for-hallucination-and-factual-inaccuracies" class="level3" data-number="9.4">
+<h3 data-number="9.4" class="anchored" data-anchor-id="potential-for-hallucination-and-factual-inaccuracies"><span class="header-section-number">9.4</span> 4. <strong>Potential for Hallucination and Factual Inaccuracies</strong></h3>
+<p>LLMs can sometimes generate plausible-sounding but factually incorrect information, a phenomenon known as hallucination. This can be particularly problematic in applications that require accurate and reliable information.</p>
+</section>
+<section id="lack-of-long-term-memory-and-consistency" class="level3" data-number="9.5">
+<h3 data-number="9.5" class="anchored" data-anchor-id="lack-of-long-term-memory-and-consistency"><span class="header-section-number">9.5</span> 5. <strong>Lack of Long-Term Memory and Consistency</strong></h3>
+<p>LLMs typically operate on a per-input basis and do not maintain long-term memory or consistency across multiple interactions. This can lead to inconsistent outputs and make it difficult to engage in coherent, long-term conversations or tasks.</p>
+</section>
+<section id="computational-and-memory-limitations" class="level3" data-number="9.6">
+<h3 data-number="9.6" class="anchored" data-anchor-id="computational-and-memory-limitations"><span class="header-section-number">9.6</span> 6. <strong>Computational and Memory Limitations</strong></h3>
+<p>LLMs require significant computational resources and memory to operate effectively. This can limit their scalability and make them challenging to deploy in resource-constrained environments.</p>
+</section>
+<section id="difficulty-in-handling-out-of-distribution-data" class="level3" data-number="9.7">
+<h3 data-number="9.7" class="anchored" data-anchor-id="difficulty-in-handling-out-of-distribution-data"><span class="header-section-number">9.7</span> 7. <strong>Difficulty in Handling Out-of-Distribution Data</strong></h3>
+<p>LLMs may struggle with inputs that are significantly different from their training data, leading to unpredictable or unreliable outputs. This can be a concern when using these models in dynamic or rapidly evolving environments.</p>
+<p>To address these limitations and challenges, ongoing research is exploring techniques such as improved training data curation, model architecture modifications, and the development of more robust and interpretable language models. However, it is crucial for users to be aware of these limitations and to carefully evaluate the suitability of LLMs for their specific use cases.</p>
+</section>
+</section>
+<section id="ethical-considerations-and-potential-risks-of-large-language-models-llms" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="ethical-considerations-and-potential-risks-of-large-language-models-llms"><span class="header-section-number">10</span> Ethical Considerations and Potential Risks of Large Language Models (LLMs)</h2>
+<p>As Large Language Models (LLMs) continue to advance and become more widely adopted, it is crucial to consider the ethical implications and potential risks associated with these powerful technologies. Some key ethical considerations and risks include:</p>
+<section id="bias-and-fairness" class="level3" data-number="10.1">
+<h3 data-number="10.1" class="anchored" data-anchor-id="bias-and-fairness"><span class="header-section-number">10.1</span> 1. <strong>Bias and Fairness</strong></h3>
+<p>LLMs can perpetuate and amplify societal biases present in their training data, leading to biased outputs that discriminate against certain groups. This is a significant concern when using these models in high-stakes applications such as hiring, lending, or criminal justice.</p>
+</section>
+<section id="privacy-and-data-rights" class="level3" data-number="10.2">
+<h3 data-number="10.2" class="anchored" data-anchor-id="privacy-and-data-rights"><span class="header-section-number">10.2</span> 2. <strong>Privacy and Data Rights</strong></h3>
+<p>The training of LLMs often involves the use of large datasets containing personal information and copyrighted material. Ensuring the privacy of individuals and respecting intellectual property rights is essential when developing and deploying these models.</p>
+</section>
+<section id="transparency-and-explainability" class="level3" data-number="10.3">
+<h3 data-number="10.3" class="anchored" data-anchor-id="transparency-and-explainability"><span class="header-section-number">10.3</span> 3. <strong>Transparency and Explainability</strong></h3>
+<p>The inner workings of LLMs are often opaque, making it challenging to interpret and explain their outputs. This lack of transparency can hinder trust, accountability, and the ability to identify and mitigate potential harms.</p>
+</section>
+<section id="misuse-and-malicious-applications" class="level3" data-number="10.4">
+<h3 data-number="10.4" class="anchored" data-anchor-id="misuse-and-malicious-applications"><span class="header-section-number">10.4</span> 4. <strong>Misuse and Malicious Applications</strong></h3>
+<p>LLMs can be used to generate fake content, impersonate real people, or create disinformation at scale. This raises concerns about the potential for misuse in areas such as fraud, manipulation, and the erosion of trust in online information.</p>
+</section>
+<section id="accountability" class="level3" data-number="10.5">
+<h3 data-number="10.5" class="anchored" data-anchor-id="accountability"><span class="header-section-number">10.5</span> 5. <strong>Accountability</strong></h3>
+<p>It is important to ensure that there are mechanisms in place to hold entities accountable for the consequences of deploying LLMs. Establish clear guidelines on the responsible use of LLMs and adhere to relevant laws and regulations. Ensure human oversight in decision-making processes involving critical applications to prevent over-reliance on automated systems.</p>
+</section>
+<section id="security" class="level3" data-number="10.6">
+<h3 data-number="10.6" class="anchored" data-anchor-id="security"><span class="header-section-number">10.6</span> 6. <strong>Security</strong></h3>
+<p>Securing LLMs against malicious uses and ensuring the integrity of the models are important to prevent misuse. Implement robust security measures to protect models from adversarial attacks and unauthorised access. Conduct regular security audits to identify and address vulnerabilities.</p>
+</section>
+<section id="environmental-impact" class="level3" data-number="10.7">
+<h3 data-number="10.7" class="anchored" data-anchor-id="environmental-impact"><span class="header-section-number">10.7</span> 7. <strong>Environmental Impact</strong></h3>
+<p>Training large-scale models is resource-intensive and has a significant carbon footprint. Considerations for reducing environmental impact include: Utilise energy-efficient computing resources to minimise the environmental impact. Invest in renewable energy and carbon offset programs to mitigate the emissions associated with model training and deployment.</p>
+</section>
+<section id="displacement-of-human-labor" class="level3" data-number="10.8">
+<h3 data-number="10.8" class="anchored" data-anchor-id="displacement-of-human-labor"><span class="header-section-number">10.8</span> 8. <strong>Displacement of Human Labor</strong></h3>
+<p>As LLMs become more capable of performing tasks traditionally done by humans, there are concerns about the potential displacement of certain types of jobs. This could lead to economic disruption and the need for workforce retraining and adaptation.</p>
+</section>
+<section id="existential-risk" class="level3" data-number="10.9">
+<h3 data-number="10.9" class="anchored" data-anchor-id="existential-risk"><span class="header-section-number">10.9</span> 9. <strong>Existential Risk</strong></h3>
+<p>Some experts worry that as AI systems like LLMs become more advanced, they could pose existential risks to humanity if not developed and deployed responsibly. This concern highlights the importance of aligning these technologies with human values and ensuring they remain under human control.</p>
+<p>To address these ethical considerations and mitigate potential risks, ongoing research is exploring techniques such as improved training data curation, model architecture modifications, and the development of more robust and interpretable language models. Additionally, the AI community is actively engaged in developing ethical frameworks, guidelines, and best practices for the responsible development and use of LLMs.</p>
+<p>It is crucial for developers, researchers, and users of LLMs to be aware of these ethical considerations and to carefully evaluate the potential impacts and risks associated with these technologies. By proactively addressing these concerns, we can work towards harnessing the power of LLMs in a way that maximises their benefits while minimising potential harms to individuals and society.</p>
+</section>
+</section>
+<section id="conclusion" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">11</span> Conclusion</h2>
+<p>This tutorial has laid the groundwork for understanding and utilising Large Language Models. We have introduced basic concepts and practical applications, discussed limitations, and previewed advanced techniques. In subsequent tutorials, we will delve deeper into these topics, enhancing our understanding and capabilities with LLMs.</p>
+<section id="further-reading-and-resources" class="level3" data-number="11.1">
+<h3 data-number="11.1" class="anchored" data-anchor-id="further-reading-and-resources"><span class="header-section-number">11.1</span> Further Reading and Resources</h3>
+<p>To deepen your understanding of Large Language Models (LLMs) and stay updated with the latest advancements in the field, a variety of resources are available. Here are some recommended readings and resources that can help expand your knowledge and skills in working with LLMs.</p>
+<section id="books" class="level4" data-number="11.1.1">
+<h4 data-number="11.1.1" class="anchored" data-anchor-id="books"><span class="header-section-number">11.1.1</span> Books</h4>
+<ul>
+<li><strong>“Deep Learning for Natural Language Processing”</strong> - This book provides a comprehensive overview of deep learning techniques used in natural language processing, including the foundational concepts behind LLMs.</li>
+<li><strong>“Artificial Intelligence: A Guide for Thinking Humans”</strong> - This book offers a critical examination of the capabilities and limitations of current AI technologies, including detailed discussions on LLMs.</li>
+<li>“The Hundred-Page Machine Learning Book” by Andriy Burkov</li>
+<li>“Natural Language Processing with Transformers” by Lewis Tunstall, Leandro von Werra, and Antonio Torrejon</li>
+<li>“Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow” by Aurélien Géron</li>
+</ul>
+</section>
+<section id="research-papers" class="level4" data-number="11.1.2">
+<h4 data-number="11.1.2" class="anchored" data-anchor-id="research-papers"><span class="header-section-number">11.1.2</span> Research Papers</h4>
+<ul>
+<li><strong>“Attention Is All You Need” by Vaswani et al.</strong> - Introducing the transformer model, this paper is fundamental to understanding the architecture underlying most modern LLMs.</li>
+<li><strong>“Language Models are Few-Shot Learners” by Brown et al.&nbsp;(OpenAI)</strong> - This paper details the methodology and capabilities of GPT-3, providing insights into the workings and potential applications of LLMs.</li>
+<li>“Attention is All You Need” by Ashish Vaswani et al.</li>
+<li>“BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding” by Jacob Devlin et al.</li>
+<li>“GPT-3: Language Models are Few-Shot Learners” by Tom B. Brown et al.</li>
+</ul>
+</section>
+<section id="online-courses" class="level4" data-number="11.1.3">
+<h4 data-number="11.1.3" class="anchored" data-anchor-id="online-courses"><span class="header-section-number">11.1.3</span> Online Courses</h4>
+<ul>
+<li><strong>Coursera: Neural Networks and Deep Learning</strong> - This course offers beginners a deep dive into the neural networks that power LLMs.</li>
+<li><strong>Udacity: Natural Language Processing Nanodegree</strong> - For those looking for practical, hands-on training in NLP technologies, including the use of LLMs.</li>
+<li>“Natural Language Processing (NLP) Specialisation” by deeplearning.ai on Coursera</li>
+<li>“Machine Learning” by Andrew Ng on Coursera</li>
+<li>“CS224n: Natural Language Processing with Deep Learning” by Stanford University on YouTube</li>
+</ul>
+</section>
+<section id="tutorials-and-guides" class="level4" data-number="11.1.4">
+<h4 data-number="11.1.4" class="anchored" data-anchor-id="tutorials-and-guides"><span class="header-section-number">11.1.4</span> Tutorials and Guides</h4>
+<ul>
+<li><p><strong>OpenAI’s GPT-3 Sandbox</strong> - OpenAI provides a platform where developers can experiment with GPT-3 to understand its capabilities and limitations.</p></li>
+<li><p><strong>Hugging Face’s Transformer Models</strong> - A comprehensive guide and toolkit for implementing transformer models, including several pre-trained LLMs that can be customised and deployed.</p></li>
+<li><p>“The Illustrated Transformer” by Jay Alammar</p></li>
+<li><p>“Hugging Face’s Transformers: State of the Art Natural Language Processing” by Patrick von Platen</p></li>
+<li><p>“The Annotated Transformer” by Alexander Rush</p></li>
+</ul>
+</section>
+<section id="conferences" class="level4" data-number="11.1.5">
+<h4 data-number="11.1.5" class="anchored" data-anchor-id="conferences"><span class="header-section-number">11.1.5</span> Conferences</h4>
+<ul>
+<li><strong>NeurIPS (Neural Information Processing Systems)</strong> - Annual conference featuring the latest research in neural networks, including sessions dedicated to LLMs.</li>
+<li><strong>ACL (Association for Computational Linguistics)</strong> - This conference focuses specifically on advancements in NLP and often features sessions on the latest developments in LLMs.</li>
+</ul>
+</section>
+<section id="forums-and-community-groups" class="level4" data-number="11.1.6">
+<h4 data-number="11.1.6" class="anchored" data-anchor-id="forums-and-community-groups"><span class="header-section-number">11.1.6</span> Forums and Community Groups</h4>
+<ul>
+<li><strong>Stack Overflow</strong> - A vital resource for troubleshooting and community advice on implementing and optimising LLMs.</li>
+<li><strong>Reddit r/MachineLearning</strong> - A community where enthusiasts and professionals discuss the latest trends and challenges in machine learning, including LLMs.</li>
+</ul>
+</section>
+<section id="podcasts" class="level4" data-number="11.1.7">
+<h4 data-number="11.1.7" class="anchored" data-anchor-id="podcasts"><span class="header-section-number">11.1.7</span> Podcasts</h4>
+<ul>
+<li><strong>The AI Alignment Podcast</strong> - Features discussions with researchers and industry leaders focused on the future of AI and ethical considerations.</li>
+<li><strong>NLP Highlights</strong> - Regular podcast episodes that discuss recent papers and trends in natural language processing.</li>
+</ul>
+</section>
+<section id="blogs" class="level4" data-number="11.1.8">
+<h4 data-number="11.1.8" class="anchored" data-anchor-id="blogs"><span class="header-section-number">11.1.8</span> Blogs</h4>
+<ul>
+<li><strong>The Gradient</strong> - A blog that critiques and contextualises new developments in AI and machine learning.</li>
+<li><strong>Distill.pub</strong> - Offers visually rich and in-depth explanations of machine learning concepts, accessible to a broader audience.</li>
+<li>“The Illustrated Transformer” by Jay Alammar</li>
+<li>“Hugging Face’s Transformers: State of the Art Natural Language Processing” by Patrick von Platen</li>
+<li>“The Annotated Transformer” by Alexander Rush</li>
+</ul>
+</section>
+<section id="open-source-libraries" class="level4" data-number="11.1.9">
+<h4 data-number="11.1.9" class="anchored" data-anchor-id="open-source-libraries"><span class="header-section-number">11.1.9</span> Open-Source Libraries</h4>
+<ul>
+<li>Hugging Face Transformers: https://huggingface.co/transformers/</li>
+<li>spaCy: https://spacy.io/</li>
+<li>NLTK (Natural Language Toolkit): https://www.nltk.org/</li>
+</ul>
+</section>
+<section id="online-platforms" class="level4" data-number="11.1.10">
+<h4 data-number="11.1.10" class="anchored" data-anchor-id="online-platforms"><span class="header-section-number">11.1.10</span> Online Platforms</h4>
+<ul>
+<li>OpenAI Playground: https://openai.com/playground/</li>
+<li>Anthropic Playground: https://www.anthropic.com/</li>
+<li>Cohere Playground: https://www.cohere.com/</li>
+</ul>
+<p>These resources provide a variety of perspectives and depth, catering to different levels of expertise and areas of interest in the field of LLMs. Whether you’re a beginner looking to get started or an advanced practitioner seeking to innovate, these resources can enhance your understanding and skills.</p>
+</section>
+</section>
+</section>
+<section id="glossary" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="glossary"><span class="header-section-number">12</span> Glossary</h2>
+<section id="abstract-reasoning-1" class="level3" data-number="12.1">
+<h3 data-number="12.1" class="anchored" data-anchor-id="abstract-reasoning-1"><span class="header-section-number">12.1</span> <strong>Abstract Reasoning</strong></h3>
+<p>The ability to understand complex concepts and apply logical thinking to new problems without relying solely on factual knowledge.</p>
+</section>
+<section id="bias" class="level3" data-number="12.2">
+<h3 data-number="12.2" class="anchored" data-anchor-id="bias"><span class="header-section-number">12.2</span> <strong>Bias</strong></h3>
+<p>The tendency of an AI system to produce outputs that discriminate against certain groups due to biases present in the training data.</p>
+</section>
+<section id="chunking" class="level3" data-number="12.3">
+<h3 data-number="12.3" class="anchored" data-anchor-id="chunking"><span class="header-section-number">12.3</span> <strong>Chunking</strong></h3>
+<p>The process of dividing a long document into smaller, discrete pieces that fit within an LLM’s maximum token count.</p>
+</section>
+<section id="context-length" class="level3" data-number="12.4">
+<h3 data-number="12.4" class="anchored" data-anchor-id="context-length"><span class="header-section-number">12.4</span> <strong>Context Length</strong></h3>
+<p>The maximum number of tokens an LLM can process in a single prompt.</p>
+</section>
+<section id="creative-text-generation-1" class="level3" data-number="12.5">
+<h3 data-number="12.5" class="anchored" data-anchor-id="creative-text-generation-1"><span class="header-section-number">12.5</span> <strong>Creative Text Generation</strong></h3>
+<p>The ability of an LLM to generate imaginative and creative forms of text, such as stories or poems.</p>
+</section>
+<section id="embedding" class="level3" data-number="12.6">
+<h3 data-number="12.6" class="anchored" data-anchor-id="embedding"><span class="header-section-number">12.6</span> <strong>Embedding</strong></h3>
+<p>A vector representation of text that captures its semantic essence.</p>
+</section>
+<section id="explainability" class="level3" data-number="12.7">
+<h3 data-number="12.7" class="anchored" data-anchor-id="explainability"><span class="header-section-number">12.7</span> <strong>Explainability</strong></h3>
+<p>The ability to interpret and explain the outputs of an AI system, particularly important for building trust and accountability.</p>
+</section>
+<section id="fairness" class="level3" data-number="12.8">
+<h3 data-number="12.8" class="anchored" data-anchor-id="fairness"><span class="header-section-number">12.8</span> <strong>Fairness</strong></h3>
+<p>Ensuring that AI systems treat individuals and groups equitably, without discrimination based on protected characteristics.</p>
+</section>
+<section id="fine-tuning" class="level3" data-number="12.9">
+<h3 data-number="12.9" class="anchored" data-anchor-id="fine-tuning"><span class="header-section-number">12.9</span> <strong>Fine-Tuning</strong></h3>
+<p>The process of further training an LLM on a specific dataset or task to optimise its performance for that particular use case.</p>
+</section>
+<section id="hallucination" class="level3" data-number="12.10">
+<h3 data-number="12.10" class="anchored" data-anchor-id="hallucination"><span class="header-section-number">12.10</span> <strong>Hallucination</strong></h3>
+<p>The generation of plausible-sounding but factually incorrect information by an LLM.</p>
+</section>
+<section id="large-language-model-llm" class="level3" data-number="12.11">
+<h3 data-number="12.11" class="anchored" data-anchor-id="large-language-model-llm"><span class="header-section-number">12.11</span> <strong>Large Language Model (LLM)</strong></h3>
+<p>An AI model, such as OpenAI’s GPT series, that is capable of understanding and generating human-like text.</p>
+</section>
+<section id="prompt-engineering" class="level3" data-number="12.12">
+<h3 data-number="12.12" class="anchored" data-anchor-id="prompt-engineering"><span class="header-section-number">12.12</span> <strong>Prompt Engineering</strong></h3>
+<p>The art of crafting effective prompts to elicit desired outputs from an LLM.</p>
+</section>
+<section id="question-answering-1" class="level3" data-number="12.13">
+<h3 data-number="12.13" class="anchored" data-anchor-id="question-answering-1"><span class="header-section-number">12.13</span> <strong>Question Answering</strong></h3>
+<p>The ability of an LLM to comprehend a body of text and provide answers to questions based on that text.</p>
+</section>
+<section id="raptor-recursive-abstractive-processing-for-tree-organised-retrieval" class="level3" data-number="12.14">
+<h3 data-number="12.14" class="anchored" data-anchor-id="raptor-recursive-abstractive-processing-for-tree-organised-retrieval"><span class="header-section-number">12.14</span> <strong>RAPTOR (Recursive Abstractive Processing for Tree-Organised Retrieval)</strong></h3>
+<p>A hierarchical retrieval method that enhances LLMs by providing access to relevant information at different levels of specificity.</p>
+</section>
+<section id="rag-retrieval-augmented-generation" class="level3" data-number="12.15">
+<h3 data-number="12.15" class="anchored" data-anchor-id="rag-retrieval-augmented-generation"><span class="header-section-number">12.15</span> <strong>RAG (Retrieval-Augmented Generation)</strong></h3>
+<p>A technique that combines the generative capabilities of LLMs with a retrieval mechanism to fetch relevant external information and generate more informed responses.</p>
+</section>
+<section id="sentiment-analysis-1" class="level3" data-number="12.16">
+<h3 data-number="12.16" class="anchored" data-anchor-id="sentiment-analysis-1"><span class="header-section-number">12.16</span> <strong>Sentiment Analysis</strong></h3>
+<p>The process of determining the emotional tone behind a series of words, useful for understanding attitudes, opinions, and emotions expressed in text.</p>
+</section>
+<section id="text-classification-1" class="level3" data-number="12.17">
+<h3 data-number="12.17" class="anchored" data-anchor-id="text-classification-1"><span class="header-section-number">12.17</span> <strong>Text Classification</strong></h3>
+<p>The process of categorising text into predefined categories, such as topics or genres.</p>
+</section>
+<section id="text-chunking" class="level3" data-number="12.18">
+<h3 data-number="12.18" class="anchored" data-anchor-id="text-chunking"><span class="header-section-number">12.18</span> <strong>Text Chunking</strong></h3>
+<p>The process of dividing a long document into smaller, more manageable pieces for processing by an LLM.</p>
+</section>
+<section id="token" class="level3" data-number="12.19">
+<h3 data-number="12.19" class="anchored" data-anchor-id="token"><span class="header-section-number">12.19</span> <strong>Token</strong></h3>
+<p>A fundamental unit of text processed by an LLM, typically a word or subword.</p>
+</section>
+<section id="vector-database" class="level3" data-number="12.20">
+<h3 data-number="12.20" class="anchored" data-anchor-id="vector-database"><span class="header-section-number">12.20</span> <strong>Vector Database</strong></h3>
+<p>A database that stores data as vectors of real numbers, which represent different features or aspects of the data items.</p>
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{borck2024,
+  author = {Borck, Michael},
+  title = {Mastering {Large} {Language} {Models:} {A} {Hands-On} {Guide}
+    to {Practical} {Applications}},
+  date = {2024-04-25},
+  langid = {en},
+  abstract = {This tutorial offers a comprehensive introduction to Large
+    Language Models (LLMs), providing learners with the knowledge and
+    tools needed to effectively utilise these powerful AI technologies.
+    Through a series of interactive examples and practical applications,
+    participants will explore the core concepts of LLMs, including
+    prompt engineering, model selection, and advanced techniques such as
+    Retrieval-Augmented Generation (RAG) and text chunking. Designed for
+    both beginners and experienced users, this guide aims to demystify
+    LLMs and illustrate their potential in solving real-world problems,
+    enhancing both understanding and capability in applying cutting-edge
+    AI.}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-borck2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Borck, Michael. 2024. <span>“Mastering Large Language Models: A Hands-On
+Guide to Practical Applications.”</span> BARG Curtin University. April
+25, 2024.
+</div></div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
